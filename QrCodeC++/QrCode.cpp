@@ -160,6 +160,41 @@ void AllData::init() {
 	};
 
 }
+void ClosedSpace::addBox(std::vector<int>&& box) {
+	boxs.push_back(std::move(box));
+}
+bool ClosedSpace::operator==(const std::pair<int, int>& points) {
+	int pointX = points.first;
+	int pointY = points.second;
+	for (auto box : boxs) {
+		int minX = box[0];
+		int maxX = box[1];
+		int maxY = box[2];
+		int minY = box[3];
+		if ((minX < pointX && pointX < maxX) && (minY < pointY && pointY < maxY)) {
+			return true;
+		}
+	}
+	return false;
+}
+void fiil() {
+	
+}
+void Matrix::init(){
+	
+}
+void Matrix::print() {
+	for (const auto& vec : matrix) {
+		for (const auto& bytes : vec) {
+			std::cout << bytes << " ";
+		}
+		std::cout << std::endl;
+	}
+
+}
+void Matrix::resize(int version) {
+	matrix.resize(version, std::vector<bool>(version));
+}
 void ByteStream::writeBits(const uint32_t num, int bitCount) {
 	for (int i = bitCount - 1; i >= 0; i--) {
 		bool bit = (num >> i) & 1;
@@ -269,8 +304,41 @@ void QrCode::createQRCode(const std::string& str, const QrCode::CodingStatus& st
 		}
 		std::cout << std::endl;
 	}
+	std::vector<uint8_t> vecUnionBlocks = unionBlocks(correctionBlocks, blocks);
+	std::cout << "union" << std::endl;
+	for (auto i : vecUnionBlocks) {
+			std::cout << (int)i << " ";
+	}
+	std::cout << std::endl;
 }
+std::vector<uint8_t> QrCode::unionBlocks(const std::vector<std::vector<uint8_t>>& corrBlock, const std::vector<std::vector<uint8_t>>& blocks){
+std::vector<uint8_t> returnedBlocks;
 
+	returnedBlocks.reserve(corrBlock.size() + blocks.size());
+
+	int j = 0;
+
+	for (int i = 0; i < blocks[j].size(); i++) {
+		std::vector<uint8_t> block;
+		for (j; j < blocks.size(); j++) {
+			if (i < blocks[j].size()) {
+				returnedBlocks.push_back(blocks[j][i]);
+			}
+		}
+		j = 0;
+	}
+
+	j = 0;
+	for (int i = 0; i < corrBlock[j].size(); i++) {
+		for (j; j < corrBlock.size(); j++) {
+			if (i < corrBlock[j].size()) {
+				returnedBlocks.push_back(corrBlock[j][i]);
+			}
+		}
+		j = 0;
+	}
+	return returnedBlocks;
+}
 std::vector<uint8_t> QrCode::createCorrectionBlock(const std::vector<uint8_t>& block, const std::vector<int>& polynomials,const int& numCorrSize) {
 
 	std::vector<uint8_t> workVec = block;
