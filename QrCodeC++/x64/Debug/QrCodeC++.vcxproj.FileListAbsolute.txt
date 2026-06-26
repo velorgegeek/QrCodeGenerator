@@ -1,0 +1,14 @@
+C:\Users\BEBERISHKA\Downloads\QrCodeC++\QrCodeC++\x64\Debug\opencv_world4d.dll
+C:\Users\BEBERISHKA\Downloads\QrCodeC++\QrCodeC++\x64\Debug\libprotobufd.dll
+C:\Users\BEBERISHKA\Downloads\QrCodeC++\QrCodeC++\x64\Debug\abseil_dll.dll
+C:\Users\BEBERISHKA\Downloads\QrCodeC++\QrCodeC++\x64\Debug\jpeg62.dll
+C:\Users\BEBERISHKA\Downloads\QrCodeC++\QrCodeC++\x64\Debug\libwebpdecoder.dll
+C:\Users\BEBERISHKA\Downloads\QrCodeC++\QrCodeC++\x64\Debug\libwebp.dll
+C:\Users\BEBERISHKA\Downloads\QrCodeC++\QrCodeC++\x64\Debug\libsharpyuv.dll
+C:\Users\BEBERISHKA\Downloads\QrCodeC++\QrCodeC++\x64\Debug\libwebpdemux.dll
+C:\Users\BEBERISHKA\Downloads\QrCodeC++\QrCodeC++\x64\Debug\libwebpmux.dll
+C:\Users\BEBERISHKA\Downloads\QrCodeC++\QrCodeC++\x64\Debug\libpng16d.dll
+C:\Users\BEBERISHKA\Downloads\QrCodeC++\QrCodeC++\x64\Debug\zd.dll
+C:\Users\BEBERISHKA\Downloads\QrCodeC++\QrCodeC++\x64\Debug\tiffd.dll
+C:\Users\BEBERISHKA\Downloads\QrCodeC++\QrCodeC++\x64\Debug\liblzma.dll
+C:\Users\BEBERISHKA\Downloads\QrCodeC++\QrCodeC++\QrCodeC++\x64\Debug\QrCodeC++.vcxproj.Up2Date

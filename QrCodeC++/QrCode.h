@@ -3,28 +3,16 @@
 #include <iostream>
 #include <unordered_map> 
 #include <iomanip>
-#include <unordered_map>
-struct AllData {
-public:
-	std::vector<std::vector<int>> maxCountData;
-	std::vector<std::vector<int>> blockCount;
-	std::unordered_map<char, int> letterscode; 
-	std::vector<std::vector<int>> countBiteCorrection;
-	std::vector<std::vector<int>> versionCorrection;
-	std::unordered_map<int, std::vector<int>> genPolynomials;
-	std::vector<uint8_t> galoisField;
-	std::vector<uint8_t> inverseGaloisField;
-	
-	AllData() { init(); }
-	void init();
-};
+#include "AllData.h"
+#include "Matrix.h"
+#include "Printer.h"
+#include <memory>
 
 struct ByteStream {
 	std::vector<uint8_t> bytes;
 	uint8_t currentByte = 0;
-	int bitsFilled = 0;
+	uint8_t bitsFilled = 0;
 public:
-	void merge(const  ByteStream& stream);
 	void flush() {
 		if (bitsFilled > 0) {
 			bytes.push_back(currentByte);
@@ -59,44 +47,35 @@ public:
 	void writeBits(const uint32_t num, int bitCount);
 };
 
-struct ClosedSpace {
-	std::vector<std::vector<int>> boxs;
-	void addBox(std::vector<int>&& box);
-	bool operator==(const std::pair<int, int>& points);
-
-};
-class Matrix {
-private:  
-	ClosedSpace closeSpace;
-	std::vector<std::vector<bool>> matrix;
-public:
-	void resize(int version);
-	void init();
-	void print();
-};
 class QrCode {
 public:
-	enum class CorrectionLevel { L, M, Q, H };
+	enum class CorrectionLevel { L, M, Q, H};
 	enum class CodingStatus { number, letters, byte, kandzi };
 
 
-	void createQRCode(const std::string& str, const QrCode::CodingStatus& status, const QrCode::CorrectionLevel correction);
 
+	void createQR(const std::string& str, const QrCode::CodingStatus& status, const QrCode::CorrectionLevel& correction);
 private:
+
+	IPrint* printer = new PrintImage();
+
 	//struct
-	AllData data;
+	Matrix matrix;
 	ByteStream byteStream;
-	Matrix qrMatrix;
+
 	//enum
 	CorrectionLevel corLevel;
 	CodingStatus codeStatus;
 	//
-	size_t QrVersion;
+	uint8_t QrVersion;
 	
+
+
 	int seekBestVersion(const size_t& byteSize);
 	int seekMaxCountData(const int& version);
+	std::vector<uint8_t> createQRCode(const std::string& str, const QrCode::CodingStatus& status, const QrCode::CorrectionLevel& correction);
 	std::vector<uint8_t> unionBlocks(const std::vector<std::vector<uint8_t>>& corrBlock, const std::vector<std::vector<uint8_t>>& blocks);
-		
-		std::vector<uint8_t> createCorrectionBlock(const std::vector<uint8_t>& block, const std::vector<int>& polynomials, const int& numCorrSize);
+	std::vector<uint8_t> toBinary(const std::vector<uint8_t>& vecUnionBlocks, std::vector<uint8_t>& buff);
+	std::vector<uint8_t> createCorrectionBlock(const std::vector<uint8_t>& block, const int& numCorrSize);
 	void fillBlocks(std::vector<std::vector<uint8_t>>& vec, const int& countBlock);
 };
