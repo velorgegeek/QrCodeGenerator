@@ -37,6 +37,7 @@ class Matrix {
 	void addData();
 	void step(int& i, int& j, bool& up, bool& a);
 	void costPenaltyPoints(const std::vector < std::vector<Node>>& matrix, size_t& penaltyPoints) const;
+	bool levelingPatternIntersect(const std::vector < std::pair<int, int>>& cord);
 public:
 	std::vector<std::vector<Node>> matrix;
 	void init(const uint8_t& size, const uint8_t correctionLevel, std::vector<uint8_t> data);

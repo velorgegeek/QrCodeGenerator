@@ -171,7 +171,7 @@ std::vector<uint8_t> returnedBlocks;
 }
 std::vector<uint8_t> QrCode::createCorrectionBlock(const std::vector<uint8_t>& block, const int& numCorrSize) {
 
-	std::vector<uint8_t> workVec = block;
+   	std::vector<uint8_t> workVec = block;
 	const auto& data = AllData::instance();
 	auto polynomials = data.genPolynomials.at(numCorrSize);
 	

@@ -72,17 +72,28 @@ void Matrix::codeVersionFill() {
 	if (qrVersion < 7) {
 		return;
 	}
-	int index = sizeMatrix - 8;
+	int index = sizeMatrix - 9;
 	const AllData& data = AllData::instance();
 	const auto version = AllData::getVersionMatrix()[qrVersion-7];
 	for (int j = 0; j < 3; j++) {
 		for (int i = 0; i < 6; i++) {
 			uint8_t num = version[j];
 			bool b = num & (1 << (5 - i));
+
 			matrix[index - j][i] = b;	
 			matrix[i][index - j] = b;
+			matrix[index - j][i].status = Node::CellStatus::serviceData;
+			matrix[i][index - j].status = Node::CellStatus::serviceData;
 		}
 	}
+}
+bool Matrix::levelingPatternIntersect(const std::vector < std::pair<int, int>>& cord) {
+	for (const auto& pair : cord) {
+		if (matrix[pair.first][pair.second].status == Node::CellStatus::serviceData) {
+			return true;
+		}
+	}
+	return false;
 }
 void Matrix::addLevelingPattern() {
 	if (qrVersion < 2) {
@@ -91,13 +102,22 @@ void Matrix::addLevelingPattern() {
 
 	const AllData& data = AllData::instance();
 	const auto positionLeveling = data.aligmentPatterns[qrVersion-1];
+	
 	for (const auto& i : positionLeveling) {
 		for (const auto& j : positionLeveling) {
-			addLevelingPatternFill(i, j, 0, 0, true);
+			std::vector < std::pair<int, int>> cord;
+
+			cord.emplace_back(std::make_pair(i-2, j-2));
+			cord.emplace_back(std::make_pair(i - 2, j + 2));
+			cord.emplace_back(std::make_pair(i + 2, j - 2));
+			if (!levelingPatternIntersect(cord)) {
+				addLevelingPatternFill(i, j, 0, 0, true);
+			}
 		}
 	}
 }
 void Matrix::addLevelingPatternFill(int i, int j, int ik, int jk, bool flag, int count) {
+
 	count++;
 	if (ik == 0) {
 		matrix[i][j] = flag;
@@ -109,6 +129,7 @@ void Matrix::addLevelingPatternFill(int i, int j, int ik, int jk, bool flag, int
 		int indexI = i;
 		int  indexJ = j;
 		for (indexI; indexI < ik; indexI++) {
+
 			matrix[indexI][indexJ].status = Node::CellStatus::serviceData;
 			matrix[indexI][indexJ] = flag;
 		}
@@ -325,7 +346,7 @@ void Matrix::addData() {
 		if (matrix[i][j].status == Node::CellStatus::none)
 		{
 			
-			matrix[i][j] = (indexData< data.size())? data[indexData]: 0;
+			matrix[i][j] = (indexData < data.size()) ? data[indexData]: 0;
 			matrix[i][j].status = Node::CellStatus::data;
 
 			indexData++;
@@ -489,17 +510,23 @@ void Matrix::createMatrix() {
 
 	syncBands(8, 6);
 
+	addMaskAndCorrection(matrix, -1);
+
+
 	codeVersionFill();
 
 	addLevelingPattern();
 
-	addMaskAndCorrection(matrix,-1);
+
 
 
 	addData();
 
-	seekBestMask();
+	addMaskMatrix(matrix,2, nullptr);
+
+
 	addPadding();
 	print(matrix);
+	std::cout << qrVersion<<std::endl;
 
 }
