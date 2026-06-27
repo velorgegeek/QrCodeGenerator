@@ -144,28 +144,37 @@ std::vector<uint8_t> QrCode::toBinary(const std::vector<uint8_t>& vecUnionBlocks
 std::vector<uint8_t> QrCode::unionBlocks(const std::vector<std::vector<uint8_t>>& corrBlock, const std::vector<std::vector<uint8_t>>& blocks){
 std::vector<uint8_t> returnedBlocks;
 
+
+	size_t maxDataLen = 0;
+	for (const auto& b : blocks) {
+		if (b.size() > maxDataLen) maxDataLen = b.size();
+	}
+
 	returnedBlocks.reserve(corrBlock.size() + blocks.size());
 
-	int j = 0;
 
-	for (int i = 0; i < blocks[j].size(); i++) {
-		std::vector<uint8_t> block;
-		for (j; j < blocks.size(); j++) {
+
+	for (size_t i = 0; i < maxDataLen; i++) {	
+		for (size_t j = 0; j < blocks.size(); j++) {
 			if (i < blocks[j].size()) {
 				returnedBlocks.push_back(blocks[j][i]);
 			}
 		}
-		j = 0;
+
 	}
 
-	j = 0;
-	for (int i = 0; i < corrBlock[j].size(); i++) {
-		for (j; j < corrBlock.size(); j++) {
+
+	size_t maxCorrLen = 0;
+	for (const auto& b : corrBlock) {
+		if (b.size() > maxCorrLen) maxCorrLen = b.size();
+	}
+
+	for (int i = 0; i < maxCorrLen; i++) {
+		for (size_t j = 0; j < corrBlock.size(); j++) {
 			if (i < corrBlock[j].size()) {
 				returnedBlocks.push_back(corrBlock[j][i]);
 			}
-		}
-		j = 0;
+		}				
 	}
 	return returnedBlocks;
 }

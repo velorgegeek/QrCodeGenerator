@@ -72,19 +72,20 @@ void Matrix::codeVersionFill() {
 	if (qrVersion < 7) {
 		return;
 	}
-	int index = sizeMatrix - 9;
+	int index = sizeMatrix - 11;
 	const AllData& data = AllData::instance();
 	const auto version = AllData::getVersionMatrix()[qrVersion-7];
 	for (int j = 0; j < 3; j++) {
 		for (int i = 0; i < 6; i++) {
 			uint8_t num = version[j];
 			bool b = num & (1 << (5 - i));
-
-			matrix[index - j][i] = b;	
-			matrix[i][index - j] = b;
-			matrix[index - j][i].status = Node::CellStatus::serviceData;
-			matrix[i][index - j].status = Node::CellStatus::serviceData;
+			std::cout << b;
+			matrix[index + j][i] = b;	
+			matrix[i][index + j] = b;
+			matrix[index + j][i].status = Node::CellStatus::serviceData;
+			matrix[i][index + j].status = Node::CellStatus::serviceData;
 		}
+		std::cout << std::endl;
 	}
 }
 bool Matrix::levelingPatternIntersect(const std::vector < std::pair<int, int>>& cord) {
